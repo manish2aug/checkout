@@ -1,0 +1,23 @@
+package com.antawine.assessment;
+
+import com.antawine.assessment.model.Cart;
+import com.antawine.assessment.model.Item;
+
+rule "Trouser promotion"
+	when
+		$cart : Cart( this.getQuantity('Trouser') != 0)
+	then
+		
+		$cart.applyPromotion('Trouser', 10, $cart.getQuantity('Trouser'), java.time.LocalDate.of(2018, 04, 10));
+end
+
+rule "Shirt & Tie Promotion"
+	when
+		$cart : Cart( this.getQuantity('Shirt') > 1 ) and Cart( this.getQuantity('Tie') > 0 )
+	then
+		if(($cart.getQuantity('Shirt')/2) > $cart.getQuantity('Tie')) {
+			$cart.applyPromotion('Tie', 50, $cart.getQuantity('Tie'));
+		} else{
+			$cart.applyPromotion('Tie', 50, ($cart.getQuantity('Shirt')/2));
+		}
+end	
